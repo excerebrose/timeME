@@ -11,7 +11,6 @@ Usage:
   ti (t|tag) <tag>...
   ti (n|note) <note-text>...
   ti (l|log) [today]
-  ti (e|edit)
   ti (i|interrupt)
   ti --no-color
   ti -h | --help
@@ -29,12 +28,11 @@ Options:
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import json, yaml
+import json
 from datetime import datetime, timedelta
 from collections import defaultdict
 import re
-import os, subprocess, tempfile
-from os import path
+from os import path, environ, getenv
 import sys
 from dotenv import load_dotenv
 import dropbox
@@ -87,7 +85,7 @@ def blue(str):
         return str
 
 def action_commit():
-    access_key = os.environ.get("DROPBOX_ACCESS_TOKEN")
+    access_key = environ.get("DROPBOX_ACCESS_TOKEN")
     data = store.load
 
     dbx = dropbox.Dropbox(access_key)
@@ -263,36 +261,6 @@ def action_log(period):
                 end=' ← working\n' if current == name else '\n')
 
 
-def action_edit():
-    if 'EDITOR' not in os.environ:
-        print("Please set the 'EDITOR' environment variable", file=sys.stderr)
-        raise SystemExit(1)
-
-    data = store.load()
-    yml = yaml.safe_dump(data, default_flow_style=False, allow_unicode=True)
-
-    cmd = os.getenv('EDITOR')
-    fd, temp_path = tempfile.mkstemp(prefix='ti.')
-    with open(temp_path, "r+") as f:
-        f.write(yml.replace('\n- ', '\n\n- '))
-        f.seek(0)
-        subprocess.check_call(cmd + ' ' + temp_path, shell=True)
-        yml = f.read()
-        f.truncate()
-        f.close
-
-    os.close(fd)
-    os.remove(temp_path)
-
-    try:
-      data = yaml.load(yml)
-    except:
-      print("Oops, that YAML didn't appear to be valid!", file=sys.stderr)
-      raise SystemExit(1)
-
-    store.dump(data)
-
-
 def is_working():
     data = store.load()
     return data.get('work') and 'end' not in data['work'][-1]
@@ -391,10 +359,6 @@ def parse_args(argv=sys.argv):
     if head in ['-h', '--help', 'h', 'help']:
         helpful_exit()
 
-    elif head in ['e', 'edit']:
-        fn = action_edit
-        args = {}
-
     elif head in ['o', 'on']:
         if not tail:
             helpful_exit('Need the name of whatever you are working on.')
@@ -456,7 +420,7 @@ def main():
     fn(**args)
 
 
-store = JsonStore(os.getenv('SHEET_FILE', None) or
+store = JsonStore(getenv('SHEET_FILE', None) or
                     path.join(path.dirname(__file__), '.ti-sheet.json'))
 
 #Loading Configuraton
