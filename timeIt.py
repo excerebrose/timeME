@@ -4,6 +4,8 @@
 """
 timeIt - simple time tracker 
 
+Note: create config.env and add DROPBOX_ACCESS_TOKEN to be able to commit files to your dropbox
+
 Usage:
   ti (o|on) <name> [<time>...]
   ti (f|fin) [<time>...]
@@ -14,7 +16,7 @@ Usage:
   ti (i|interrupt)
   ti --no-color
   ti -h | --help
-  ti (c|comm)
+  ti (c|comm) 
 
 Options:
   -h --help         Show this help.
