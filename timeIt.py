@@ -121,6 +121,8 @@ def action_on(name, time, interrupt_task=False):
       action_tag(['interrupt'])
 
     print('Started on ' + coloured_name + '.')
+    action_commit()
+
 
 
 def action_fin(time, back_from_interrupt=True):
@@ -144,6 +146,7 @@ def action_fin(time, back_from_interrupt=True):
             print('You are now %d deep in interrupts.' % len(data['interrupt_stack']))
         else:
             print('Congrats, you\'re out of interrupts!')
+    action_commit()
 
 
 def action_interrupt(name, time):
@@ -163,6 +166,8 @@ def action_interrupt(name, time):
 
     action_on(name, time, True)
     print('You are now %d deep in interrupts.' % len(interrupt_stack))
+    action_commit()
+
 
 
 def action_note(content):
@@ -179,6 +184,8 @@ def action_note(content):
     store.dump(data)
 
     print('Yep, noted to ' + yellow(current['name']) + '.')
+    action_commit()
+
 
 
 def action_tag(tags):
@@ -196,6 +203,7 @@ def action_tag(tags):
     tag_count = len(tags)
     print('Okay, tagged current work with ' + str(tag_count) + ' tag' +
             ('s' if tag_count > 1 else '') + '.')
+    action_commit()
 
 
 def action_status():
@@ -446,7 +454,6 @@ def parse_args(argv=sys.argv):
 def main():
     fn, args = parse_args()
     fn(**args)
-    action_commit()
 
 
 store = JsonStore(os.getenv('SHEET_FILE', None) or
