@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 """
-timeIt - simple time tracker 
+timeME - simple time tracker 
 
 Note: create config.env and add DROPBOX_ACCESS_TOKEN to be able to commit files to your dropbox
 
