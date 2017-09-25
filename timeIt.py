@@ -457,7 +457,7 @@ def main():
 
 
 store = JsonStore(os.getenv('SHEET_FILE', None) or
-                    os.path.expanduser('./.ti-sheet.json'))
+                    path.join(path.dirname(__file__), '.ti-sheet.json'))
 
 #Loading Configuraton
 dotenv_path = path.join(path.dirname(__file__), 'config.env')
