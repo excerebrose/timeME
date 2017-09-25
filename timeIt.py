@@ -2,8 +2,7 @@
 # encoding: utf-8
 
 """
-ti is a simple and extensible time tracker for the command line. Visit the
-project page (http://ti.sharats.me) for more details.
+timeIt - simple time tracker 
 
 Usage:
   ti (o|on) <name> [<time>...]
@@ -20,8 +19,7 @@ Usage:
 
 Options:
   -h --help         Show this help.
-  <start-time>...   A time specification (Go to http://ti.sharats.me for more on
-                    this).
+  <start-time>...   A time specification.
   <tag>...          Tags can be made of any characters, but its probably a good
                     idea to avoid whitespace.
   <note-text>...    Some arbitrary text to be added as `notes` to the currently
