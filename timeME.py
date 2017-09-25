@@ -273,7 +273,7 @@ def ensure_working():
 
     print("For all I know, you aren't working on anything."
             " I don't know what to do.", file=sys.stderr)
-    print('See `ti -h` to know how to start working.', file=sys.stderr)
+    print('See `timeME -h` to know how to start working.', file=sys.stderr)
     raise SystemExit(1)
 
 
