@@ -132,6 +132,9 @@ def action_fin(time, back_from_interrupt=True):
 
     current = data['work'][-1]
     current['end'] = time
+    time_diff = round((parse_isotime(time) - parse_isotime(current['start'])).seconds / 60.00, 2)
+    current['total_mins'] = time_diff
+
     store.dump(data)
     print('So you stopped working on ' + red(current['name']) + '.')
 
@@ -249,7 +252,7 @@ def action_log(period):
 
         log[name]['tmsg'] = ', '.join(tmsg)[::-1].replace(',', ' &'[::-1], 1)[::-1]
 
-    for name, item in sorted(log.items(), key=(lambda x: x[1]), reverse=True):
+    for name, item in sorted(log.items(), key=(lambda x: x[1]['delta']), reverse=True):
         print(name.ljust(name_col_len), ' ∙∙ ', item['tmsg'],
                 end=' ← working\n' if current == name else '\n')
 
@@ -445,6 +448,7 @@ def parse_args(argv=sys.argv):
 def main():
     fn, args = parse_args()
     fn(**args)
+    action_commit()
 
 
 store = JsonStore(os.getenv('SHEET_FILE', None) or
